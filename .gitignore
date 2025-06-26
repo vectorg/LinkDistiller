@@ -1,0 +1,7 @@
+.env
+__pycache__
+.vscode
+
+_dev/
+articles/
+summaries/
