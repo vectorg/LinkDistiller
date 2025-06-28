@@ -8,12 +8,13 @@ import json
 from datetime import datetime
 from utils.print_utils import get_color_printer, colorize  # 添加colorize导入
 
-def llm_cache(cache_dir="data/cache/llm_responses", use_cache=True, stream_delay=0.001):
+def llm_cache(cache_dir="data/cache/llm_responses", use_cache=True, stream_delay=0.001, show_prompt=False):
     """LLM响应缓存装饰器
     Args:
         cache_dir: 缓存目录路径
         use_cache: 是否启用缓存
         stream_delay: 启用缓存时，流式输出时每个字符的延迟时间(秒)
+        show_prompt: 是否在控制台输出 prompt
     """
     Path(cache_dir).mkdir(parents=True, exist_ok=True)
     
@@ -29,7 +30,7 @@ def llm_cache(cache_dir="data/cache/llm_responses", use_cache=True, stream_delay
             cache_key = _get_cache_key(prompt)
             cache_file = os.path.join(cache_dir, f"{cache_key}.txt")
             cache_file_abs = os.path.abspath(cache_file)
-            if stream_output and stream_delay >= 0:
+            if show_prompt:
                 print(colorize(prompt, "bright_green"))
             print(colorize(cache_file_abs, "bright_yellow"))
 
@@ -41,10 +42,6 @@ def llm_cache(cache_dir="data/cache/llm_responses", use_cache=True, stream_delay
                         debug_print(f"缓存文件 {cache_file} 中的响应为空，重新请求", level="WARNING")
                         os.remove(cache_file)  # 删除不完整的缓存文件
                     else:
-                        # # 添加明显的缓存使用提示
-                        # print("\n" + "="*50)
-                        # print("✅ 使用缓存响应 (无需API请求)")
-                        # print("="*50)
                         debug_print(f"使用上述缓存文件", level="INFO")
                         response = response_parts[1].strip()
                         if stream_output and stream_delay >= 0:
