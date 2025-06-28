@@ -1,8 +1,8 @@
 import os
 import time
 from datetime import datetime
-from sili_fun import chat_completion
-from fetch_article_content import fetch_article_content
+from utils.sili_client import chat_completion
+from utils.fetch_article_content import fetch_article_content
 
 def extract_title_from_content(content):
     """从内容中提取标题"""
