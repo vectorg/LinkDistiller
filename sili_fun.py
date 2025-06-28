@@ -5,8 +5,8 @@ import os
 load_dotenv()
 
 def chat_completion(message):
-    url = os.getenv("SILI_BASE_URL")
-    api_key = os.getenv("SILI_API_KEY")
+    url = os.getenv("SILI_BASE_URL","")
+    api_key = os.getenv("SILI_API_KEY","")
     
     headers = {
         "Authorization": f"Bearer {api_key}",
