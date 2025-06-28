@@ -57,4 +57,45 @@ def append_to_markdown_table(md_file, idx, title, url, article_file_path, summar
     row = f"| {idx} | {title_escaped} | {url_link} | {article_link} | {summary_link} | {publish_date} | {add_datetime} |\n"
     
     with open(md_file, 'a', encoding='utf-8') as f:
-        f.write(row) 
+        f.write(row)
+
+def read_and_filter_urls(urls_file, processed_urls):
+    if not os.path.exists(urls_file):
+        print(f"错误：找不到 {urls_file} 文件")
+        return []
+    with open(urls_file, 'r', encoding='utf-8') as f:
+        all_urls = [line.strip() for line in f if line.strip()]
+    new_urls = [url for url in all_urls if url not in processed_urls]
+    return new_urls
+
+def save_article(article_file_path, title, url, publish_date, add_datetime, content):
+    with open(article_file_path, 'w', encoding='utf-8') as f:
+        f.write(f"# {title}\n\n")
+        f.write(f"**来源链接：** [{url}]({url})\n\n")
+        f.write(f"**发布日期：** {publish_date}\n\n")
+        f.write(f"**获取时间：** {add_datetime}\n\n")
+        f.write("---\n\n")
+        f.write(content)
+
+def save_summary(summary_file_path, title, url, current_index, publish_date, add_datetime, summary):
+    with open(summary_file_path, 'w', encoding='utf-8') as f:
+        f.write(f"# {title} - 总结\n\n")
+        f.write(f"**原文链接：** [{url}]({url})\n\n")
+        f.write(f"**原文文件：** [点击查看](../articles/article_{current_index}.md)\n\n")
+        f.write(f"**发布日期：** {publish_date}\n\n")
+        f.write(f"**总结时间：** {add_datetime}\n\n")
+        f.write("---\n\n")
+        f.write(summary)
+
+def init_dirs_and_files(data_dir):
+    articles_dir = os.path.join(data_dir, 'articles')
+    summaries_dir = os.path.join(data_dir, 'summaries')
+    md_file = os.path.join(data_dir, 'articles_data.md')
+    urls_file = os.path.join(data_dir, 'urls.txt')
+    os.makedirs(data_dir, exist_ok=True)
+    os.makedirs(articles_dir, exist_ok=True)
+    os.makedirs(summaries_dir, exist_ok=True)
+    if not os.path.exists(md_file):
+        with open(md_file, 'w', encoding='utf-8') as f:
+            f.write(create_markdown_table())
+    return articles_dir, summaries_dir, md_file, urls_file 

@@ -1,5 +1,5 @@
 from datetime import datetime
-from utils.sili_client import chat_completion
+import os
 
 def extract_title_from_content(content):
     """从内容中提取标题"""
@@ -23,11 +23,11 @@ def extract_date_from_content(content):
     except:
         return datetime.now().strftime("%Y-%m-%d")
 
-def summarize_text(text):
-    try:
-        prompt = f"请用中文总结以下内容：\n{text}"
-        summary = chat_completion(prompt)
-        return summary.strip() if summary else ""
-    except Exception as e:
-        print(f"总结失败: {e}")
-        return "" 
+def read_and_filter_urls(urls_file, processed_urls):
+    if not os.path.exists(urls_file):
+        print(f"错误：找不到 {urls_file} 文件")
+        return []
+    with open(urls_file, 'r', encoding='utf-8') as f:
+        all_urls = [line.strip() for line in f if line.strip()]
+    new_urls = [url for url in all_urls if url not in processed_urls]
+    return new_urls 
