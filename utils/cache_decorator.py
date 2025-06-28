@@ -8,7 +8,7 @@ import json
 from datetime import datetime
 from utils.print_utils import get_color_printer, colorize  # 添加colorize导入
 
-def llm_cache(cache_dir="data/cache/llm_responses", use_cache=True, stream_delay=0.01):
+def llm_cache(cache_dir="data/cache/llm_responses", use_cache=True, stream_delay=0.001):
     """LLM响应缓存装饰器
     Args:
         cache_dir: 缓存目录路径
