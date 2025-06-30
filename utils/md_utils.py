@@ -60,15 +60,6 @@ def append_to_markdown_table(md_file, idx, title, url, article_file_path, summar
     with open(md_file, 'a', encoding='utf-8') as f:
         f.write(row)
 
-def read_and_filter_urls(urls_file, processed_urls):
-    if not os.path.exists(urls_file):
-        print(f"错误：找不到 {urls_file} 文件")
-        return []
-    with open(urls_file, 'r', encoding='utf-8') as f:
-        all_urls = [line.strip() for line in f if line.strip()]
-    new_urls = [url for url in all_urls if url not in processed_urls]
-    return new_urls
-
 def save_article(article_file_path, title, url, publish_date, add_datetime, content):
     with open(article_file_path, 'w', encoding='utf-8') as f:
         f.write(f"# {title}\n\n")
@@ -99,4 +90,4 @@ def init_dirs_and_files(data_dir):
     if not os.path.exists(md_file):
         with open(md_file, 'w', encoding='utf-8') as f:
             f.write(create_markdown_table())
-    return articles_dir, summaries_dir, md_file, urls_file 
+    return articles_dir, summaries_dir, md_file, urls_file

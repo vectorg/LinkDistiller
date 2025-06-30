@@ -27,7 +27,29 @@ def read_and_filter_urls(urls_file, processed_urls):
     if not os.path.exists(urls_file):
         print(f"错误：找不到 {urls_file} 文件")
         return []
+    url_note_pairs = []
     with open(urls_file, 'r', encoding='utf-8') as f:
-        all_urls = [line.strip() for line in f if line.strip()]
-    new_urls = [url for url in all_urls if url not in processed_urls]
-    return new_urls 
+        for line in f:
+            url, note = extract_url_and_note(line)
+            if url and url not in processed_urls:
+                url_note_pairs.append((url, note))
+    return url_note_pairs
+
+def extract_url_and_note(line):
+    """
+    从一行字符串中精确提取第一个http(s)链接，链接前后内容都作为说明。
+    返回 (url, note)。
+    """
+    import re
+    line = line.strip()
+    if not line:
+        return '', ''
+    # 匹配第一个http(s)链接
+    match = re.search(r'(https?://\S+)', line)
+    if match:
+        url = match.group(1)
+        # 链接前后的内容都作为说明
+        note = (line[:match.start()] + line[match.end():]).strip()
+        return url, note
+    # 没有链接时，全部当说明
+    return '', line

@@ -58,12 +58,12 @@ def main():
     processed_urls, max_index = read_processed_urls(md_file)
     print(f"已处理的链接数量: {len(processed_urls)}")
     print(f"当前最大序号: {max_index}")
-    new_urls = read_and_filter_urls(urls_file, processed_urls)
-    print(f"发现 {len(new_urls)} 个新链接需要处理")
+    new_url_notes = read_and_filter_urls(urls_file, processed_urls)
+    print(f"发现 {len(new_url_notes)} 个新链接需要处理")
     processed_count = 0
-    for url in new_urls:
+    for url, note in new_url_notes:
         current_index = max_index + processed_count + 1
-        success = process_url(url, current_index, articles_dir, summaries_dir, md_file, tags="", note="")
+        success = process_url(url, current_index, articles_dir, summaries_dir, md_file, tags="", note=note)
         if success or not success:
             processed_count += 1
         print(f"第{current_index}个链接处理完成，已记录到数据文档")
