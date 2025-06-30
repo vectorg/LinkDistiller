@@ -14,6 +14,7 @@
 - 📋 **智能总结**：调用 AI（通过 `utils/sili_client.py`）生成文章总结
 - 🕒 **自动记录时间**：自动记录文章发布日期和处理时间
 - 🧩 **模块化设计**：核心功能拆分在 `utils/` 目录下，便于维护和扩展
+- 🖊️ **交互式输入**：支持通过 `tests/input_urls.py` 脚本交互式输入链接，并即时处理和总结
 
 ## 文件结构
 
@@ -38,6 +39,8 @@ utils/
 ├── sili_client.py            # AI 总结接口
 └── text_utils.py             # 文本处理工具
 main.py                       # 主程序入口
+tests/
+└── input_urls.py             # 交互式输入并即时处理链接
 ```
 
 ## 数据表格格式
@@ -56,6 +59,7 @@ main.py                       # 主程序入口
 
 ## 使用方法
 
+### 方式一：批量处理
 1. 在 `data/urls.txt` 文件中添加要处理的链接（每行一个）
 2. 运行主程序：
    ```bash
@@ -64,9 +68,18 @@ main.py                       # 主程序入口
 3. 查看生成的 `data/articles_data.md` 文件
 4. 点击表格中的文件路径链接可以直接跳转到对应文件
 
+### 方式二：交互式即时处理
+1. 运行交互式输入脚本：
+   ```bash
+   python tests/input_urls.py
+   ```
+2. 按提示输入链接，每输入一个链接会立即下载内容、生成总结并保存，输入空行退出
+3. 处理结果会实时显示，所有数据同样写入 Markdown 文件和目录
+
 ## 主要模块说明
 
 - `main.py`：主流程控制，负责调度各功能模块
+- `tests/input_urls.py`：交互式输入链接并即时处理
 - `utils/fetch_article_content.py`：抓取网页原文内容
 - `utils/text_utils.py`：提取标题、发布日期、过滤已处理链接
 - `utils/md_utils.py`：Markdown 文件的读写、表格追加、目录初始化等
