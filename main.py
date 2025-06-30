@@ -15,7 +15,7 @@ def summarize_text(text):
         print(f"总结失败: {e}")
         return ""
 
-def process_url(url, current_index, articles_dir, summaries_dir, md_file):
+def process_url(url, current_index, articles_dir, summaries_dir, md_file, tags="", note=""):
     print(f"处理第{current_index}个链接: {url}")
     print(f"正在请求原文内容...")
     add_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -26,7 +26,7 @@ def process_url(url, current_index, articles_dir, summaries_dir, md_file):
         title = "获取失败"
         summary = "内容获取失败"
         publish_date = "未知"
-        append_to_markdown_table(md_file, current_index, title, url, "内容获取失败", "内容获取失败", publish_date, add_datetime)
+        append_to_markdown_table(md_file, current_index, title, url, "内容获取失败", "内容获取失败", publish_date, add_datetime, tags, note)
         return False
     print(f"原文已获取，保存路径: {os.path.abspath(article_file_path)}")
     title = extract_title_from_content(content)
@@ -36,7 +36,7 @@ def process_url(url, current_index, articles_dir, summaries_dir, md_file):
     summary = summarize_text(content[:10000])
     save_summary(summary_file_path, title, url, current_index, publish_date, add_datetime, summary)
     print(f"总结已保存，保存路径: {os.path.abspath(summary_file_path)}")
-    append_to_markdown_table(md_file, current_index, title, url, article_file_path, summary_file_path, publish_date, add_datetime)
+    append_to_markdown_table(md_file, current_index, title, url, article_file_path, summary_file_path, publish_date, add_datetime, tags, note)
     return True
 
 def print_status(processed_count, md_file, articles_dir, summaries_dir, urls_file, no_new_url=False):
@@ -63,7 +63,7 @@ def main():
     processed_count = 0
     for url in new_urls:
         current_index = max_index + processed_count + 1
-        success = process_url(url, current_index, articles_dir, summaries_dir, md_file)
+        success = process_url(url, current_index, articles_dir, summaries_dir, md_file, tags="", note="")
         if success or not success:
             processed_count += 1
         print(f"第{current_index}个链接处理完成，已记录到数据文档")

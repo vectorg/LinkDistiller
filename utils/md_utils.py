@@ -5,8 +5,8 @@ def create_markdown_table():
     """创建Markdown表格头部"""
     return """# 文章数据记录
 
-| 序号 | 标题 | 链接 | 原文文件路径 | 总结文件路径 | 文章发布日期 | 添加日期时间 |
-|------|------|------|-------------|-------------|-------------|-------------|
+| 序号 | 标题 | 链接 | 原文文件路径 | 总结文件路径 | 文章发布日期 | 添加日期时间 | 标签 | 说明 |
+|------|------|------|-------------|-------------|-------------|-------------|------|------|
 """
 
 def read_processed_urls(md_file):
@@ -38,8 +38,8 @@ def read_processed_urls(md_file):
     
     return processed_urls, max_index
 
-def append_to_markdown_table(md_file, idx, title, url, article_file_path, summary_file_path, publish_date, add_datetime):
-    """向Markdown文件添加一行数据"""
+def append_to_markdown_table(md_file, idx, title, url, article_file_path, summary_file_path, publish_date, add_datetime, tags="", note=""):
+    """向Markdown文件添加一行数据，增加标签和说明字段"""
     # 将文件路径转换为相对路径，使其可以点击
     article_relative_path = os.path.relpath(article_file_path, os.path.dirname(md_file))
     summary_relative_path = os.path.relpath(summary_file_path, os.path.dirname(md_file))
@@ -54,7 +54,8 @@ def append_to_markdown_table(md_file, idx, title, url, article_file_path, summar
     # 链接显示为简洁的"链接"文字
     url_link = f"[链接]({url})"
     
-    row = f"| {idx} | {title_escaped} | {url_link} | {article_link} | {summary_link} | {publish_date} | {add_datetime} |\n"
+    # 新增标签和说明字段
+    row = f"| {idx} | {title_escaped} | {url_link} | {article_link} | {summary_link} | {publish_date} | {add_datetime} | {tags} | {note} |\n"
     
     with open(md_file, 'a', encoding='utf-8') as f:
         f.write(row)
