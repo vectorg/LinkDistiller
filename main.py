@@ -31,6 +31,13 @@ def process_url(url, current_index, articles_dir, summaries_dir, md_file, tags="
     print(f"原文已获取，保存路径: {os.path.abspath(article_file_path)}")
     title = extract_title_from_content(content)
     publish_date = extract_date_from_content(content)
+    print(f"文章标题：{title}")
+    
+    # 过滤说明字段：如果说明开头与标题相同，则移除标题部分
+    if note and title and note.startswith(title):
+        note = note[len(title):].strip()
+    print(f"文章说明：{note}")
+
     save_article(article_file_path, title, url, publish_date, add_datetime, content)
     print(f"正在用AI总结内容...")
     summary = summarize_text(content[:10000])

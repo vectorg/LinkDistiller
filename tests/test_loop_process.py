@@ -11,7 +11,7 @@ from utils.text_utils import read_and_filter_urls
 def loop_process_new_links(data_dir='data', wait_seconds=5):
     articles_dir, summaries_dir, md_file, urls_file = init_dirs_and_files(data_dir)
     processed_count = 0
-
+    print(f"正在监控链接文件：{os.path.abspath(urls_file)}")
     while True:
         processed_urls, max_index = read_processed_urls(md_file)
         new_url_notes = read_and_filter_urls(urls_file, processed_urls)
